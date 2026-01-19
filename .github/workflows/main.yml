@@ -27,9 +27,9 @@ jobs:
         working-directory: starttech-application/Client
         run: npm ci
 
-      - name: Run unit tests
+      - name: Run unit tests  if(present)
         working-directory: starttech-application/Client
-        run: npm test -- --watch=false
+        run: npm test -- --watch=false 
 
       - name: Security scan (npm audit)
         working-directory: starttech-application/Client
