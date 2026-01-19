@@ -5,9 +5,10 @@ name: StartTech-application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+     - main
     paths:
-      - "Client"
+      - "Client/**"
   # pull_request:
   #   branches: [ "main" ]
 
