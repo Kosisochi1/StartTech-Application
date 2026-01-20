@@ -65,7 +65,7 @@ jobs:
           path: starttech-application/dist
           
       - name: Configure AWS
-        uses: aws-action/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v4
         with:
 
           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
