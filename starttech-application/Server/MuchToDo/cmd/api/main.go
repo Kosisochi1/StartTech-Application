@@ -147,9 +147,10 @@ func preloadUsernamesIntoCache(db *mongo.Client, cacheSvc cache.Cache, cfg confi
     h.logger.Errorf("failed to set cache key %s: %v", cacheKey, err)
 			slog.Info("Successfully preloaded usernames into cache", "count", len(usernamesToCache))
 		}
-	} else {
-		slog.Info("No usernames found to preload.")
 	}
+	// 	else {
+	// 	slog.Info("No usernames found to preload.")
+	// }
 }
 
 // setupRouter initializes the Gin router and sets up the routes.
