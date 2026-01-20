@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: react-build
-          path: starttech-application/dist
+          path: starttech-application/Client/dist
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -62,10 +62,10 @@ jobs:
         with:
 
           name: react-build
-          path: starttech-application/dist
+          path: starttech-application/Client/dist
           
       - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
 
           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
@@ -73,7 +73,8 @@ jobs:
           aws-region: ${{secrets.AWS_REGION}}
       - name: Deploy to S3
         run: |
-            aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+            aws s3 sync starttech-application/Client/dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+
 
       - name: Invalidate CloudFront cache
         run: |
