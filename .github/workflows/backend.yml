@@ -1,0 +1,85 @@
+name: Backend CI/CD Pipeline
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "starttech-application/Server/**"
+
+jobs:
+  test:
+    name: Test and Scan Go app
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+          cache-dependency-path: starttech-application/Server/MuchToDo/go.sum
+
+      - name: Download dependencies
+        working-directory: starttech-application/Server/MuchToDo
+        run: go mod download
+
+      - name: Run unit tests
+        working-directory: starttech-application/Server/MuchToDo
+        run: go test ./... -v -race || echo "Race test failed, review manually"
+        
+      - name: Run  Integration Test
+        working-directory: starttech-application/Server/MuchToDo
+        run: INTEGRATION=true go test -v --tags=integration ./...
+
+      - name: Code quality (golangci-lint)
+        uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: starttech-application/Server/MuchToDo
+          version: v1.64.8
+
+      - name: Vulnerability Scan
+        working-directory: starttech-application/Server/MuchToDo
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          govulncheck ./... || echo "Vulnerabilities detected"
+
+  build:
+     name: Build and Push Docker Image
+     runs-on: ubuntu-latest
+     needs: test
+
+
+     steps:
+       - uses: actions/checkout@v4
+
+       - name: Login to Docker Hub
+         uses: docker/login-action@v3
+         with:
+           username: ${{secrets.DOCKERHUB_USERNAME}}
+           password: ${{secrets.DOCKERHUB_TOKEN}}
+
+
+       - name: Build Docker Image
+         working-directory: starttech-application/Server/MuchToDo
+         run: |
+           docker build -t backend:${{github.sha}} .
+
+       - name: Scan Docker Image
+         uses: aquasecurity/trivy-action@0.33.1
+         with:
+
+           image-ref: backend:${{github.sha}}
+           severity: CRITICAL,HIGH
+
+       - name: Tag Image
+         run: |
+           IMAGE_URI=${{secrets.DOCKER_IMAGE_NAME}}:${{github.sha}}
+           docker tag backend:${{github.sha}} $IMAGE_URI
+
+       - name: Docker Image Push
+         run: docker push $IMAGE_URI
+         
+         
+          

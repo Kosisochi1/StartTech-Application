@@ -137,18 +137,21 @@ func preloadUsernamesIntoCache(db *mongo.Client, cacheSvc cache.Cache, cfg confi
 		return
 	}
 
-	if len(usernamesToCache) > 0 {
-		err := cacheSvc.SetMany(ctx, usernamesToCache, usernameCacheTTL)
-		if err != nil {
-			slog.Error("Error preloading usernames to cache", slog.Any("error", err))
-		} else {
-			// Set the sentinel key to prevent re-loading until it expires.
-			cacheSvc.Set(ctx, usernameCacheSentinelKey, "true", usernameCacheTTL)
-			slog.Info("Successfully preloaded usernames into cache", "count", len(usernamesToCache))
-		}
-	} else {
-		slog.Info("No usernames found to preload.")
-	}
+if len(usernamesToCache) > 0 {
+    if err := cacheSvc.SetMany(ctx, usernamesToCache, usernameCacheTTL); err != nil {
+        slog.Error("Error preloading usernames to cache", slog.Any("error", err))
+    } else {
+        // Set the sentinel key to prevent re-loading until it expires.
+        if err := cacheSvc.Set(ctx, usernameCacheSentinelKey, "true", usernameCacheTTL); err != nil {
+            slog.Error("Failed to set username cache sentinel", slog.Any("error", err))
+        } else {
+            slog.Info("Successfully preloaded usernames into cache", "count", len(usernamesToCache))
+        }
+    }
+} else {
+    slog.Info("No usernames found to preload.")
+}
+
 }
 
 // setupRouter initializes the Gin router and sets up the routes.
