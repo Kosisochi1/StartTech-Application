@@ -75,7 +75,7 @@ jobs:
 
        - name: Tag Image
          run: |
-           IMAGE_URI=${{secrets.DOCKERHUB_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:${{github.sha}}
+          echo  "IMAGE_URI=${{secrets.DOCKERHUB_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:${{github.sha}}"
            docker tag backend:${{github.sha}} $IMAGE_URI
 
        - name: Docker Image Push
