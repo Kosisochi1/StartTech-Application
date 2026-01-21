@@ -95,11 +95,12 @@ jobs:
            aws-region: ${{secrets.AWS_REGION}}
 
 
-       - name: Trigger ASG 
+       - name: Trigger ASG
          run: |
-           aws autoscaling start-instance-refresh \
-           --auto-scaling-group-name ${{secrets.AGS_NAME}}\
-           --preference MinHealthyPercentage=90,InstanceWarmup=120
+          aws autoscaling start-instance-refresh \
+          --auto-scaling-group-name ${{ secrets.ASG_NAME }} \
+          --preferences MinHealthyPercentage=90,InstanceWarmup=120
+
        - name: Smoke test
          run: |
            sleep 60
