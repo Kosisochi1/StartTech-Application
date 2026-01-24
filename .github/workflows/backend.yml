@@ -118,7 +118,7 @@ jobs:
          working-directory:  starttech-application/Server/MuchToDo
          run: |
            aws s3 cp server s3://${{ secrets.S3_BUCKET }}
-           aws s3 cp deploy/starttech-backend.service
+           aws s3 cp deploy/starttech-backend.service \
              s3://${{ secrets.S3_BUCKET }}
 
        - name: Trigger ASG
