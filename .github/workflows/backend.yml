@@ -168,7 +168,7 @@ jobs:
            
 
 
-     steps:
+     
        - name: Configure AWS credential
          uses: aws-actions/configure-aws-credentials@v4
          with:
