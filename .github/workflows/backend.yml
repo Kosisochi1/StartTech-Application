@@ -168,19 +168,19 @@ jobs:
            
 
 
-     steps:
-       - name: Configure AWS credential
-         uses: aws-actions/configure-aws-credentials@v4
-         with:
+     
+       # - name: Configure AWS credential
+       #   uses: aws-actions/configure-aws-credentials@v4
+       #   with:
 
-           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-           aws-region: ${{secrets.AWS_REGION}}
-       - name: Trigger ASG
-         run: |
-           aws autoscaling start-instance-refresh \
-           --auto-scaling-group-name ${{ secrets.ASG_NAME }} \
-           --preferences MinHealthyPercentage=90,InstanceWarmup=120
+       #     aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+       #     aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+       #     aws-region: ${{secrets.AWS_REGION}}
+       # - name: Trigger ASG
+       #   run: |
+       #     aws autoscaling start-instance-refresh \
+       #     --auto-scaling-group-name ${{ secrets.ASG_NAME }} \
+       #     --preferences MinHealthyPercentage=90,InstanceWarmup=120
 
 
       
