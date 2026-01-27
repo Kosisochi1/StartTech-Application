@@ -81,7 +81,14 @@ jobs:
            image-ref: backend:${{github.sha}}
            severity: CRITICAL,HIGH
        - name: Tag & push image
+         env:
+             AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+             AWS_REGION: ${{ secrets.AWS_REGION }}
+             ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
          run: |
+
+          aws ecr get-login-password --region $AWS_REGION | \
+            docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
           IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
           IMAGE_LATEST=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
 
