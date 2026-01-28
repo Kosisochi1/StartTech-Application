@@ -16,11 +16,24 @@ func CORSMiddleware(allowedOrigins []string) gin.HandlerFunc {
 	// config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 
 		config := cors.Config{
-		AllowOrigins:     []string{"*"}, // ✅ allowed now
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		AllowCredentials: false, // ✅ IMPORTANT
-		// MaxAge:           12 * time.Hour,
+		// AllowOrigins:     []string{"*"}, // ✅ allowed now
+		// AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		// AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		// AllowCredentials: false, // ✅ IMPORTANT
+		// // MaxAge:           12 * time.Hour,
+
+		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+	    AllowHeaders: []string{
+		         "Origin",
+		         "Content-Type",
+		           "Accept",
+		         "Authorization",
+	    },
+	    ExposeHeaders: []string{"Content-Length"},
+	    AllowOriginFunc: func(origin string) bool {
+		       return true // allow ALL origins
+	    },
+	    AllowCredentials: false,
 	}
 
 	return cors.New(config)
