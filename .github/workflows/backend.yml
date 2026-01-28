@@ -146,8 +146,7 @@ jobs:
            aws s3 cp deploy/starttech-backend.service  \
              s3://${{ secrets.S3_BUCKET }} \
 
-           aws s3 cp deploy/fetch-ssm-env.sh \
-           s3://${{secrets.S3_BUCKET}}
+           
 
        - name: Trigger ASG
          run: |
