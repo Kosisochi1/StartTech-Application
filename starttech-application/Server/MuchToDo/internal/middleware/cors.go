@@ -20,7 +20,7 @@ func CORSMiddleware(allowedOrigins []string) gin.HandlerFunc {
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: false, // ✅ IMPORTANT
-		MaxAge:           12 * time.Hour,
+		// MaxAge:           12 * time.Hour,
 	}
 
 	return cors.New(config)
