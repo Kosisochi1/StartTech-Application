@@ -158,6 +158,15 @@ if len(usernamesToCache) > 0 {
 func setupRouter(db *mongo.Client, cfg config.Config, tokenSvc *auth.TokenService, cacheSvc cache.Cache) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	router.Use(func(c *gin.Context) {
+	if c.Request.Method == http.MethodOptions {
+		c.Status(http.StatusNoContent)
+		c.Abort()
+		return
+	}
+	c.Next()
+})
+
 
 	// Initialize collections
 	todoCollection := db.Database(cfg.DBName).Collection("todos")
